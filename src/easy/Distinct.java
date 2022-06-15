@@ -1,7 +1,9 @@
+
+/* 220503 {@code Codility} Lesson 6 Sorting */
 package easy;
 
 /**
- * 220503 Codility Lesson 6 Sorting Write a function
+ * Write a function
  * <blockquote>{@code
  *      class Solution { public int solution(int[] A); }
  * }</blockquote>
@@ -9,32 +11,41 @@ package easy;
  * distinct values in array A.
  * <p>
  * For example, given array A consisting of six elements such that:
- * <blockquite>{@code
- * A[0] = 2    A[1] = 1    A[2] = 1
- * A[3] = 2    A[4] = 3    A[5] = 1
+ * <blockquote>{@code
+ *      A[0] = 2    A[1] = 1    A[2] = 1
+ *      A[3] = 2    A[4] = 3    A[5] = 1
  * }</blockquote>
  * the function should return 3, because there are 3 distinct values appearing
  * in array A, namely 1, 2 and 3.
  * <p>
  * Write an efficient algorithm for the following assumptions:
  * <p>
- * N is an integer within the range [0..100,000]; each element of array A is an
- * integer within the range [−1,000,000..1,000,000].
+ * <ul><li>N is an integer within the range {@code [0..100,000]};
+ * <li>each element of array A is an integer within the range
+ * {@code [−1,000,000..1,000,000]} .</ul>
  *
  * @author antw
  */
 public class Distinct {
 
+    /**
+     * To returns the number of distinct values in array A.
+     *
+     * @param A Array A
+     * @return numbers of distinct.
+     */
     public int solution(int[] A) {
-        int lgth = A.length, numDistinct = 0, min, max;
 
+        int lgth = A.length, numDistinct = 0, min, max, arrayBLgth;
+
+        // if A array is either 1 ot zero
         if (lgth < 2) {
             return lgth;
         }
 
-        // search for max and min
-        min = lgth;
-        max = 0;
+        // search for max and min of A
+        min = A[0];
+        max = A[0];
         for (int i = 0; i < lgth; i++) {
             if (A[i] < min) {
                 min = A[i];
@@ -44,17 +55,16 @@ public class Distinct {
             }
         }
 
-        //System.out.println("min: " + min + " max: " + max);
-        byte[] B = new byte[max + 1];
-        //System.out.println("B lgth: " + B.length);
+        arrayBLgth = max - min + 1;
+        byte[] B = new byte[arrayBLgth];
 
+        // sorting A to B array. 1 for present of A value
         for (int i = 0; i < lgth; i++) {
-            B[A[i]] = 1;
-            //System.out.print("B[" + A[i] + "]  ");
+            B[A[i] - min] = 1;
         }
-        //System.out.println("");
 
-        for (int b = min; b <= max; b++) {
+        // count no of distincts
+        for (int b = 0; b < arrayBLgth; b++) {
             if (B[b] == 1) {
                 numDistinct++;
             }
@@ -64,47 +74,70 @@ public class Distinct {
     }
 
     /**
+     * main.
+     *
      * @param args the command line arguments
      */
     public static void main(String args[]) {
 
         Distinct c = new Distinct();
-        data.TestData data = new data.TestData();
+        data.TestData d = new data.TestData();
 
-        int[] A = {2, 1, 1, 0, 100000, 1};
+        int[] A = {2, 1, 1, -10000000, 3, 10000000};
         System.out.println("Solution A: " + c.solution(A));
         int[] B = {2, 1};
         System.out.println("Solution B: " + c.solution(B));
-        int[] C = data.endPairOdd(999999);
+        int[] C = d.endPairOdd(999999);
         System.out.println("Solution C: " + c.solution(C));
-        int[] D = data.evenOdd(999999);
+        int[] D = d.evenOdd(999999);
         System.out.println("Solution D: " + c.solution(D));
-
+        int[] E = {-1, -2, -3, -1, -2};
+        System.out.println("Solution E: " + c.solution(E));
     }
 }
-
-/* CodeCheck Report: 75% 
-Analysis summary
-The following issues have been detected: runtime errors.
-
-For example, for the input [-1, -2, -3, -1, -2] the solution terminated unexpectedly.
-
+/* Sample dialogue
+run:
+Solution A: 5
+Solution B: 2
+Solution C: 500000
+Solution D: 500000
+Solution E: 3
+BUILD SUCCESSFUL (total time: 0 seconds)
+ */
+ /* CodeCheck Report: 100% 
+Analysis
+Detected time complexity:
+O(N*log(N)) or O(N)
+expand allExample tests
+▶ example1 
+example test, positive answer ✔OK
+expand allCorrectness tests
+▶ extreme_empty 
+empty sequence ✔OK
+▶ extreme_single 
+sequence of one element ✔OK
+▶ extreme_two_elems 
+sequence of three distinct elements ✔OK
+▶ extreme_one_value 
+sequence of 10 equal elements ✔OK
+▶ extreme_negative 
+sequence of negative elements, length=5 ✔OK
+▶ extreme_big_values 
+sequence with big values, length=5 ✔OK
+▶ medium1 
+chaotic sequence of value sfrom [0..1K], length=100 ✔OK
+▶ medium2 
+chaotic sequence of value sfrom [0..1K], length=200 ✔OK
+▶ medium3 
+chaotic sequence of values from [0..10], length=200 ✔OK
+collapse allPerformance tests
+▶ large1 
+chaotic sequence of values from [0..100K], length=10K ✔OK
+1. 0.028 s OK
 ▶ large_random1 
-chaotic sequence of values from [-1M..1M], length=100K ✘RUNTIME ERROR 
-tested program terminated with exit code 1
-1. 0.276 s RUNTIME ERROR,  tested program terminated with exit code 1
-stderr:
-Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: -949979
-	at Solution.solution(Solution.java:34)
-	at Exec.run(exec.java:48)
-	at Exec.main(exec.java:34)
+chaotic sequence of values from [-1M..1M], length=100K ✔OK
+1. 0.296 s OK
 ▶ large_random2 
-another chaotic sequence of values from [-1M..1M], length=100K ✘RUNTIME ERROR 
-tested program terminated with exit code 1
-1. 0.268 s RUNTIME ERROR,  tested program terminated with exit code 1
-stderr:
-Exception in thread "main" java.lang.ArrayIndexOutOfBoundsException: -182928
-	at Solution.solution(Solution.java:34)
-	at Exec.run(exec.java:48)
-	at Exec.main(exec.java:34)
-*/
+another chaotic sequence of values from [-1M..1M], length=100K ✔OK
+1. 0.300 s OK
+ */
